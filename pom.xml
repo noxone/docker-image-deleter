@@ -13,17 +13,43 @@
 	<version>1.0-SNAPSHOT</version>
 
 	<name>docker-image-deleter</name>
-
 	<!-- TODO: description, url, licenses -->
+	<description>A github action to delete old docker images.</description>
+	<url>https://github.com/noxone/docker-image-deleter</url>
+	<licenses>
+		<license>
+			<name>MIT</name>
+		</license>
+	</licenses>
 
 	<!-- TODO: developers -->
+	<developers>
+		<developer>
+			<name>Olaf Neumann</name>
+			<id>noxone</id>
+		</developer>
+	</developers>
 
 	<!-- TODO: scm, issueManagement, ciManagement -->
+	<scm>
+		<url>https://github.com/noxone/docker-image-deleter</url>
+		<connection>scm:git:https://github.com/noxone/docker-image-deleter.git</connection>
+	</scm>
+	<issueManagement>
+		<system>Github Issues</system>
+		<url>https://github.com/noxone/docker-image-deleter/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Github Actions</system>
+		<url>https://github.com/noxone/docker-image-deleter/actions</url>
+	</ciManagement>
+
 	<properties>
 		<jar.manifest.mainClass>org.olafneumann.github.docker.deleter.DockerImageDeleter</jar.manifest.mainClass>
 
 		<parent-pom.github.organization>noxone</parent-pom.github.organization>
 
+		<tidy.skip>true</tidy.skip>
 		<gpg.skip>true</gpg.skip>
 
 		<checkstyle.skip>true</checkstyle.skip>
