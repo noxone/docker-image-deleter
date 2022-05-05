@@ -12,8 +12,8 @@ jobs:
         uses: noxone/docker-image-deleter@refs/heads/main
         with:
           url: "https://hub.docker.com/v2"
-          username: ${{ secrets.DOCKER_USERNAME }}
-          token: ${{ secrets.DOCKER_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_TOKEN }}
           tagsToKeep: 11
           repositories: regexgenerator
 
