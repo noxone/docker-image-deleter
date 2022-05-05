@@ -9,7 +9,7 @@ jobs:
     name: "Delete Docker images"
     steps:
       - name: "Delete them"
-        uses: noxone/docker-image-deleter@5e8496142a38ef9247ec30977cbc27443ef49612
+        uses: noxone/docker-image-deleter@refs/heads/main
         with:
           url: "https://hub.docker.com/v2"
           username: ${{ secrets.GITHUB_USERNAME }}
