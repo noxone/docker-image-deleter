@@ -1,0 +1,33 @@
+name: 'Delete old Docker tags'
+description: 'Delete old tags from docker container registry.'
+inputs:
+  url:  # id of input
+    description: 'The container registry to work with.'
+    required: false
+    default: 'https://hub.docker.com/v2'
+  username:
+    description: The username to use for log in
+    required: true
+  token:
+    description: The secret to be used to retrieve a valid token.
+    required: true
+  tagsToKeep:
+    description: The number of tags to keep in the registry.
+    required: false
+    default: '6'
+  repositories:
+    description: Comma separated list of repository names to work with.'
+    required: false
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - "--token=${{ inputs.token }}"
+    - "--user=${{ inputs.username }}"
+    - "--url=${{ inputs.url }}"
+    - "--keep=${{ inputs.tagsToKeep }}"
+    - "--repositories=${{ inputs.repositories }}"
+

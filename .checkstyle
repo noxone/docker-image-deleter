@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileset-config file-format-version="1.2.0" simple-config="false" sync-formatter="false">
+  <local-check-config description="" location=".settings/checkstyle.xml" name="Checkstyle" type="project">
+    <additional-data name="protect-config-file" value="false" />
+  </local-check-config>
+  <fileset check-config-name="Checkstyle" enabled="true" local="true" name="main">
+    <file-match-pattern include-pattern="true" match-pattern="^src/main/java/" />
+    <file-match-pattern include-pattern="true" match-pattern="^src/main/lombok/" />
+  </fileset>
+  <fileset check-config-name="Checkstyle" enabled="true" local="true" name="test">
+    <file-match-pattern include-pattern="true" match-pattern="^src/test/java/" />
+    <file-match-pattern include-pattern="true" match-pattern="^src/test/lombok/" />
+  </fileset>
+</fileset-config>

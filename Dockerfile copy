@@ -1,0 +1,16 @@
+FROM eclipse-temurin:8-jre
+WORKDIR /app
+COPY ./target/docker-image-deleter-1.0-SNAPSHOT-jar-with-dependencies.jar /app/docker-image-deleter.jar
+ENTRYPOINT [ "java", "-jar", "/app/docker-image-deleter.jar" ]
+
+
+
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java17@sha256:25a7e2308e3425e59886fb6b7e1371389447773e2a0e82aa9e623cc9caf05321 AS build
+RUN gu install native-image
+WORKDIR /build/
+COPY ./target/docker-image-deleter-1.0-SNAPSHOT-jar-with-dependencies.jar /build/app.jar
+RUN cd /build && native-image --static -jar app.jar -H:Name=output
+
+FROM scratch
+COPY --from=build /build/output /opt/output
+CMD ["/opt/output"]
