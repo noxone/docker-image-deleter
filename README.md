@@ -6,3 +6,7 @@ This parent POM is made for great Java projects, handling
 
 ## Getting started
 TODO: Easy to understand usage example
+
+## Documentation
+
+See auto [generated reports](https://olafneumann.org/docker-image-deleter/summary.html).

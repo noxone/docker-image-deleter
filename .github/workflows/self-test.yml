@@ -1,0 +1,19 @@
+name: Test myself
+
+on:
+  workflow_dispatch:
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    name: "Delete Docker images"
+    steps:
+      - name: "Delete them"
+        uses: noxone/docker-image-deleter
+        with:
+          url: "https://hub.docker.com/v2"
+          username: ${{ secrets.GITHUB_USERNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tagsToKeep: 11
+          repositories: regexgenerator
+
