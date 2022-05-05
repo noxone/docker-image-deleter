@@ -92,6 +92,7 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<descriptorRefs>
@@ -107,7 +108,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-my-jar-with-dependenciess</id>
+						<id>assemble-all</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
