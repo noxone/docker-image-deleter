@@ -23,6 +23,9 @@ on:
         type: boolean
         required: false
         default: true
+    secrets:
+      GPG_SECRET_KEY:
+      GPG_SECRET_KEY_PASSWORD:
 
 env:
   JAVA_VERSION: 16
