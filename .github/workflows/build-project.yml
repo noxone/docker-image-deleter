@@ -56,7 +56,7 @@ jobs:
         run: |
           set -o errexit -o pipefail
           gpgParameter="-Dskip.gpg=true"
-          if [ $inputs.uploadArtifacts ]; then
+          if [ ${{inputs.uploadArtifacts}} ]; then
             gpgParameter=""
           fi
           echo mvn test verify --batch-mode --show-version $gpgParameter
@@ -82,7 +82,8 @@ jobs:
         env:
           JDK_VERSION: ${{env.JAVA_VERSION}}
       - name: Echo
-        run: "echo reports: $inputs.includeReports , upload: $inputs.uploadArtifacts"
+        run: |
+          echo reports: ${{inputs.includeReports}} , upload: ${{inputs.uploadArtifacts}}
       - name: "Maven: Site"
         if: ${{ inputs.includeReports }}
         run: |
