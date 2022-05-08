@@ -55,7 +55,11 @@ jobs:
       - name: "Maven: Test, Verify"
         run: |
           set -o errexit -o pipefail
-          mvn test verify --batch-mode --show-version 2>&1 | tee --append mvnout.txt
+          gpgParameter="-Dskip.gpg=true"
+          if [ $inputs.uploadArtifacts ]; then
+            gpgParameter=""
+          fi
+          mvn test verify --batch-mode --show-version $gpgParameter 2>&1 | tee --append mvnout.txt
           set +o errexit +o pipefail
         env:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
