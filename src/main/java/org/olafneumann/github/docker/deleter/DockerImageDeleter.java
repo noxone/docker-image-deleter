@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.olafneumann.github.docker.client.DockerClient;
 import org.olafneumann.github.docker.client.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.larssh.utils.Finals;
 import picocli.CommandLine;
@@ -15,6 +17,8 @@ import picocli.CommandLine.Option;
 
 @SuppressWarnings("javadoc")
 public class DockerImageDeleter implements Callable<Integer> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DockerImageDeleter.class);
+
 	private static final String DEFAULT_URL_STRING = Finals.constant("https://hub.docker.com/v2");
 
 	public static void main(final String... args) {
@@ -61,7 +65,7 @@ public class DockerImageDeleter implements Callable<Integer> {
 		final List<String> repositoryNames
 				= repositories != null && !repositories.isEmpty() ? repositories : client.readRepositories();
 
-		System.out.println("Working for repos: " + repositoryNames);
+		LOGGER.debug("Working for repos: {}", repositoryNames);
 
 		for (final String repositoryName : repositoryNames) {
 			workOnRepository(client, repositoryName);
@@ -75,8 +79,7 @@ public class DockerImageDeleter implements Callable<Integer> {
 				.skip(numberOfTagsToKeep)
 				.collect(Collectors.toList());
 		for (final Tag tag : tagsToDelete) {
-			System.out.println(
-					String.format("Deleting tag '%s' in repository '%s'.", tag.getName(), tag.getRepositoryName()));
+			LOGGER.info("Deleting tag '{}' in repository '{}'.", tag.getName(), tag.getRepositoryName());
 			// tag.delete();
 		}
 	}
