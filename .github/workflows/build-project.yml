@@ -45,8 +45,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: ${{env.JAVA_VERSION}}
-          # gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          # gpg-passphrase: GPG_PASSPHRASE
+          gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
       - name: "Maven: Clean, Build, Install"
         run: |
           set -o errexit -o pipefail
@@ -57,9 +57,9 @@ jobs:
           set -o errexit -o pipefail
           mvn test verify --batch-mode --show-version 2>&1 | tee --append mvnout.txt
           set +o errexit +o pipefail
-        #env:
+        env:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - name: Check Output
         shell: bash {0}
         run: |
