@@ -49,12 +49,17 @@
 
 		<parent-pom.github.organization>noxone</parent-pom.github.organization>
 
+		<slf4j.version>1.7.36</slf4j.version>
+
 		<tidy.skip>true</tidy.skip>
-		<gpg.skip>true</gpg.skip>
+		<!--<gpg.skip>true</gpg.skip>-->
 
 		<checkstyle.skip>true</checkstyle.skip>
 		<pmd.skip>true</pmd.skip>
 		<spotbugs.skip>true</spotbugs.skip>
+		
+		<!-- Dependency analyses doesn't work correct!? -->
+		<mdep.analyze.skip>true</mdep.analyze.skip>
 
 		<!-- Prevent override of existing files -->
 		<parent-pom.create-gitignore>false</parent-pom.create-gitignore>
@@ -68,6 +73,17 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/info.picocli/picocli -->
 		<dependency>
 			<groupId>info.picocli</groupId>
@@ -91,6 +107,24 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>analyze</id>
+						<goals>
+							<goal>analyze-only</goal>
+						</goals>
+						<configuration>
+							<failOnWarning>true</failOnWarning>
+							<ignoredDependencies>
+								<ignoredDependency>org.slf4j:slf4j-simple</ignoredDependency>
+							</ignoredDependencies>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>

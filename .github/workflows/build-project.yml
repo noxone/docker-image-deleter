@@ -1,0 +1,90 @@
+name: Build project
+
+on:
+  workflow_dispatch:
+    inputs:
+      uploadArtifacts:
+        description: "Define whether or not to upload the artifacts"
+        type: boolean
+        required: false
+        default: false
+      includeReports:
+        description: "Shall report output be included in the uploaded artifacts?"
+        type: boolean
+        required: false
+        default: true
+  workflow_call:
+    inputs:
+      uploadArtifacts:
+        type: boolean
+        required: false
+        default: false
+      includeReports:
+        type: boolean
+        required: false
+        default: true
+
+env:
+  JAVA_VERSION: 16
+
+# based https://docs.github.com/en/actions/guides/building-and-testing-java-with-gradle
+jobs:
+  build-project:
+    runs-on: ubuntu-latest
+    name: Build with Java
+    steps:
+      - name: Cache Dependencies
+        uses: actions/cache@v3.0.2
+        with:
+          key: maven-dependencies
+          path: ~/.m2/repository
+      - name: Check out
+        uses: actions/checkout@v3.0.2
+      - name: Set up JDK $JAVA_VERSION
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: $JAVA_VERSION
+          # gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          # gpg-passphrase: GPG_PASSPHRASE
+      - name: "Maven: Clean, Build, Install"
+        run: |
+          set -o errexit -o pipefail
+          mvn clean install --activate-profiles dirty,dirty-package --update-snapshots --batch-mode --show-version 2>&1 | tee mvnout.txt
+          set +o errexit +o pipefail
+      - name: "Maven: Test, Verify"
+        run: |
+          set -o errexit -o pipefail
+          mvn test verify --batch-mode --show-version 2>&1 | tee --append mvnout.txt
+          set +o errexit +o pipefail
+        #env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Check Output
+        shell: bash {0}
+        run: |
+          chmod +x ./target/mvn-suppressions-parent.sh
+          mvnout=`cat mvnout.txt | grep --perl-regexp "(?i)\\[(ERR|WARN)" | ./target/mvn-suppressions-parent.sh "$JDK_VERSION"`
+          
+          if [ -n "${mvnout}" ]; then
+            echo "[ERROR] The Maven output contains the following unknown warnings and errors:" >&2
+            echo "${mvnout}" >&2
+            false
+          else
+            echo "[INFO] No unknown warnings and errors found."
+            echo "${mvnout}" >&2
+          fi
+        env:
+          JDK_VERSION: $JAVA_VERSION
+      - name: "Maven: Site"
+        if: ${{ includeReports }}
+        run: |
+          set -o errexit -o pipefail
+          mvn site --batch-mode
+          set +o errexit +o pipefail
+      - name: Upload artifacts
+        if: ${{ inputs.uploadArtifacts }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: site
+          path: ./target/*-full.jar
