@@ -25,7 +25,9 @@ on:
         default: true
     secrets:
       GPG_SECRET_KEY:
+        required: true
       GPG_SECRET_KEY_PASSWORD:
+        required: true
 
 env:
   JAVA_VERSION: 16
