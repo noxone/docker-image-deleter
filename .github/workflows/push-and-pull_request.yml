@@ -15,7 +15,7 @@ jobs:
     name: Build with JDK $JAVA_VERSION
     steps:
       - name: Cache Dependencies
-        uses: actions/cache@v3.0.2
+        uses: actions/cache@v3.0.3
         with:
           key: maven-dependencies
           path: ~/.m2/repository
